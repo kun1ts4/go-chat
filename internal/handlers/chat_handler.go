@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"github.com/jackc/pgx/v4"
+	"fmt"
 	"go-chat/internal/domain"
 	"go-chat/internal/services"
 	"io"
@@ -49,8 +49,21 @@ func (c *ChatHandler) PostChatMessage() http.HandlerFunc {
 	}
 }
 
-func GetChat(db *pgx.Conn) http.HandlerFunc {
+func (c *ChatHandler) GetChat() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		//TODO
+		messages, err := c.chatService.GetChat(context.Background())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		jsonResult, err := json.Marshal(messages)
+		if err != nil {
+			http.Error(w, "json marshaling error", http.StatusInternalServerError)
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(fmt.Sprintf(`{"messages": %s}`, jsonResult)))
 	}
 }

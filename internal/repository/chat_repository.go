@@ -28,7 +28,7 @@ func (r *ChatRepo) PostChatMessage(ctx context.Context, message domain.Message) 
 }
 
 func (r *ChatRepo) GetChat(ctx context.Context) ([]domain.Message, error) {
-	q, err := r.db.Query(ctx, `SELECT (sender, message_text, created_at) FROM global_messages`)
+	q, err := r.db.Query(ctx, `SELECT sender, message_text, created_at FROM global_messages`)
 	if err != nil {
 		return nil, err
 	}

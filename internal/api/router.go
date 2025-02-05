@@ -19,6 +19,7 @@ func NewRouter(authHandler *handlers.AuthHandler, tokenService *services.TokenSe
 	r := chi.NewRouter()
 	r.Use(mw.Auth(tokenService))
 	r.Post("/chat", chatHandler.PostChatMessage())
+	r.Get("/chat", chatHandler.GetChat())
 
 	r.Get("/hello", func(writer http.ResponseWriter, request *http.Request) {
 		writer.Write([]byte("hello"))
