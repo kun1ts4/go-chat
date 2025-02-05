@@ -1,6 +1,6 @@
 package domain
 
 type DirectMessage struct {
-	Recipient string
+	Recipient string `json:"recipient"`
 	Message
 }

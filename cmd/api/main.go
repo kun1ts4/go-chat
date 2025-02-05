@@ -27,7 +27,11 @@ func main() {
 	chatService := services.NewChatService(chatRepo)
 	chatHandler := handlers.NewChatHandler(chatService)
 
-	r := api.NewRouter(authHandler, tokenService, chatHandler)
+	dmRepo := repository.NewDMRepo(db)
+	dmService := services.NewDMService(dmRepo)
+	dmHandler := handlers.NewDMHandler(dmService)
+
+	r := api.NewRouter(authHandler, tokenService, chatHandler, dmHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
